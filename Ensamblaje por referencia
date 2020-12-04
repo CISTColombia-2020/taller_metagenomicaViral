@@ -3,8 +3,9 @@ TALLER DE ENSAMBLAJE POR REFERENCIA DE VIRUS
 Para la realización de este taller vamos a implementar ....
 
 Mapeo
+------------
 bwa index -p barcode02 ~/01_genomasINS/01_octubre/01_Artic/02_assembly/01_bwa/barcode02/barcode02.consensus.fasta
-
+--------
 bwa mem barcode02 ~/01_genomasINS/01_octubre/01_Artic/01_filter/barcode02.fastq > aln_barcode02.sam
 
 Calculo de metricas de ensamblaje
