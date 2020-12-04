@@ -1,3 +1,21 @@
 TALLER DE ENSAMBLAJE POR REFERENCIA DE VIRUS
 
 Para la realización de este taller vamos a implementar ....
+
+Mapeo
+bwa index -p barcode02 ~/01_genomasINS/01_octubre/01_Artic/02_assembly/01_bwa/barcode02/barcode02.consensus.fasta
+
+bwa mem barcode02 ~/01_genomasINS/01_octubre/01_Artic/01_filter/barcode02.fastq > aln_barcode02.sam
+
+Calculo de metricas de ensamblaje
+
+1) Transformar el archivo de mapeo
+samtools view -S -b aln_barcode02.sam > aln_barcode02.bam
+
+2) Organizar el archivo de mapeo
+samtools sort aln_barcode02.bam -o aln_barcode02-sorted.bam
+
+3)
+samtools mpileup aln_barcode02-sorted.bam | awk -v X="${MIN_COVERAGE_DEPTH}" '$4>=X' | wc -l
+
+samtools depth aln_barcode02-sorted.bam | awk '{sum+=$3} END { print "Average = ",sum/NR}'
