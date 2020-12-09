@@ -1,0 +1,23 @@
+Anotación Funcional
+
+Usando el programa VIBRANT (https://github.com/AnantharamanLab/VIBRANT), este es un programa de anotación funcional. Que usa las bases de datos de KEGG, Pfam y VOG, para 
+informar cuales son las proteínas de virus en la muestra del metagenoma.
+
+-----
+python3 ~/00_programas/VIBRANT-master/VIBRANT_run.py -i taller/01_anotacion/mixed_example.fasta  -folder anotacionFuncional
+-----
+
+Usando el programa KRAKEN2 (https://github.com/DerrickWood/kraken2/wiki/Manual#classification). Este programa realiza clasificación taxonomica de diferentes organismos.
+
+1. Descargar la base de datos: https://benlangmead.github.io/aws-indexes/k2 . Tambien la podemos construir apartir de un reporte de taxonomía y de secuencias de ADN. 
+
+2. ejecutar el código para la anotación taxonomica del metagenoma
+
+-----
+./kraken2 --db kraken2-master/k2-minus --report ~/taller/01_anotacion/k2_report2.txt --report-minimizer-data --output ~/taller/01_anotacion/k2_output2.txt ~/taller/01_anotacion/CIST0049-SPAdes_scaffolds.fasta
+-----
+
+3. Ejecutar el código para la anotación taxonomica del genoma
+-----
+./kraken2 --db kraken2-master/k2-minus --report ~/taller/01_anotacion/k2_report2.txt --report-minimizer-data --output ~/taller/01_anotacion/k2_output2.txt ~/taller/01_anotacion/CIST0018_assembledSeg2.fasta
+-----
