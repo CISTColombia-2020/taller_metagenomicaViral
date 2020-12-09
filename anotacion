@@ -4,7 +4,7 @@ Usando el programa VIBRANT (https://github.com/AnantharamanLab/VIBRANT), este es
 informar cuales son las proteínas de virus en la muestra del metagenoma.
 
 -----
-python3 ~/00_programas/VIBRANT-master/VIBRANT_run.py -i taller/01_anotacion/mixed_example.fasta  -folder anotacionFuncional
+python3 ~/00_programas/VIBRANT-master/VIBRANT_run.py -i mixed_example.fasta -folder anotacionMixed
 -----
 
 Usando el programa KRAKEN2 (https://github.com/DerrickWood/kraken2/wiki/Manual#classification). Este programa realiza clasificación taxonomica de diferentes organismos.
