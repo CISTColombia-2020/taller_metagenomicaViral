@@ -1,22 +1,40 @@
-TALLER DE ENSAMBLAJE POR REFERENCIA DE VIRUS
+Ensamblaje
+1. Crear indice secuencia de referencia
+$ bwa index secRefDENV3.fasta
 
-Para la realización de este taller vamos a implementar ....
+2.Mapear reads en formato fasta a la referencia y obtener sam
+$ bwa mem -t 4 secRefDENV3.fasta 449686_1_INS.fastq 449686_2_INS.fastq > mapeo1.sam
 
-Mapeo
-------------
-bwa index -p barcode02 ~/01_genomasINS/01_octubre/01_Artic/02_assembly/01_bwa/barcode02/barcode02.consensus.fasta
---------
-bwa mem barcode02 ~/01_genomasINS/01_octubre/01_Artic/01_filter/barcode02.fastq > aln_barcode02.sam
+3. Convertir SAM a BAM
+$ samtools view -S -b mapeo1.sam > mapeo1.bam
 
-Calculo de metricas de ensamblaje
+4.Ordenar BAM
+$ samtools sort mapeo1.bam -o mapeo1-sorted.bam
 
-1) Transformar el archivo de mapeo
-samtools view -S -b aln_barcode02.sam > aln_barcode02.bam
+5.Generar archivo de Variantes
+$ bcftools mpileup -Ou -f secRefDENV3.fasta mapeo1-sorted.bam | bcftools call -mv -Oz -o calls.vcf.gz
 
-2) Organizar el archivo de mapeo
-samtools sort aln_barcode02.bam -o aln_barcode02-sorted.bam
+6.Crear indice variantes
+$ bcftools index calls.vcf.gz
 
-3)
-samtools mpileup aln_barcode02-sorted.bam | awk -v X="${MIN_COVERAGE_DEPTH}" '$4>=X' | wc -l
+7.Generar secuencia consenso con variantes
+$ cat secRefDENV3.fasta | bcftools consensus calls.vcf.gz > consensus.fa
 
-samtools depth aln_barcode02-sorted.bam | awk '{sum+=$3} END { print "Average = ",sum/NR}'
+8.Generar secuencia índice consenso con variantes
+$ bwa index consensus.fa
+
+Métricas para profundidad y cobertura
+
+9. Mapeo consenso a los reads
+$ bwa mem -t 4 consensus.fa 449686_1_INS.fastq 449686_2_INS.fastq > mapeo2.sam
+10. Convertir SAM a BAM
+$ samtools view -S -b mapeo2.sam > mapeo2.bam
+
+11. Ordenar BAM
+$ samtools sort mapeo2.bam -o mapeo2-sorted.bam
+                                          
+12. Determinar cobertura con número de bases ensambladas respecto al genoma de referencia
+$ samtools mpileup mapeo2-sorted.bam | awk -v X="${MIN_COVERAGE_DEPTH}" '$4>=X' | wc -l
+
+13. Determinar profundidad con el número de reads
+$ samtools depth mapeo2-sorted.bam | awk '{sum+=$3} END { print "Average = ",sum/NR}'
